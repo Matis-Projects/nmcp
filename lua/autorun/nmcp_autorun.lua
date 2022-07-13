@@ -6,7 +6,7 @@ if SERVER then
     function Start()
         local lng = GetLanguage()
         
-        local version = "beta_1.1" --> Please don't touch this!
+        local version = "beta_1.1.5" --> Please don't touch this!
         local starttime = os.clock()
         print( "[NMCP] " .. lng["EVENT"]["HTTP-REQUEST"][1])
         http.Fetch( "https://raw.githubusercontent.com/Matis-Projects/nmcp/main/actual_version.txt",
@@ -34,6 +34,8 @@ if SERVER then
         include("nmcp/server/sv_physgun.lua")
     end
     
+    Start()
+    
 	local as_loaded = false
     function PlayerSpawn(plr, transition)
         if not(as_loaded) then
@@ -43,7 +45,8 @@ if SERVER then
 	end
     
 	hook.Add("PlayerSpawn", "NMCP::Load", PlayerSpawn)
-else
+
     AddCSLuaFile("nmcp/client/cl_notify.lua")
+else
     include("nmcp/client/cl_notify.lua")
 end

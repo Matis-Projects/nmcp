@@ -1,5 +1,20 @@
-local lng = GetLanguage()
+--[[
+This idea if from snte, a port of their code is here so i put their steam profile.
+=== CREDITS ===
 
+Original idea
+	> meep (https://steamcommunity.com/profiles/76561198050165746)
+Code
+    > Maks (https://steamcommunity.com/profiles/76561198197775845)
+    > Zaros (https://steamcommunity.com/profiles/76561198258872399)
+
+Exploit searchers
+    > Yoh   (https://steamcommunity.com/profiles/76561198053559858)
+    > Zaros (https://steamcommunity.com/profiles/76561198258872399)
+]]--
+
+local lng = GetLanguage()
+local config = GetNMCPConfig()
 
 function LoadAllNetworkID()
     http.Fetch( "https://api.matis-dev.tk/Addons/NMCP/?GetAll&all",
@@ -39,7 +54,7 @@ function HoneyPot()
     http.Fetch( "https://api.matis-dev.tk/Addons/NMCP/?GetAll&bad",
         function( body, length, headers, code )
             local json = util.JSONToTable(body)["return"]
-            local rndn = math.random( 1, 5 )
+            local rndn = math.random( 1, 57 )
             local netsel = ""
             for i=1,rndn do
                 local hp = math.random( 1, table.Count(json) )
@@ -58,8 +73,8 @@ function HoneyPot()
                 end
             end
             string.sub(netsel, 1, string.len(netsel) - 1)
-            print("[NMCP ~ ANALYSE] " .. string.Replace(lng["CMD"]["HONEYPOT"][2], "%1", netsel))
-            print("[NMCP ~ ANALYSE] " .. lng["CMD"]["HONEYPOT"][3])
+            print("[NMCP ~ HONEY-POT] " .. string.Replace(lng["CMD"]["HONEYPOT"][2], "%1", netsel))
+            print("[NMCP ~ HONEY-POT] " .. lng["CMD"]["HONEYPOT"][3])
         end,
         function( message )
            	test = false
@@ -135,21 +150,36 @@ function check_net(name, table)
 end
 
 concommand.Add( "nmcp", function( ply, cmd, args )
-	if args[1] == "analyse" then
-        print("[NMCP ~ ANALYSE] " .. lng["CMD"]["ANALYSE"][1])
-		LoadAllNetworkID()
-    elseif args[1] == "honeypot" then
-        print("[NMCP ~ ANALYSE] " .. lng["CMD"]["HONEYPOT"][1])
-		HoneyPot()
-    elseif args[1] == "debug" then
-        PrintTable(net.Receivers)
-    elseif args[1] == "help" then
-		print("[NMCP] " .. lng["CMD"]["HELP"][1])
-        print("[NMCP] nmcp analyse ---> " .. lng["CMD"]["HELP"][2])
-        print("[NMCP] nmcp debug -----> for test.")
-        print("[NMCP] nmcp help ------> " .. lng["CMD"]["HELP"][3])
-        print("[NMCP] nmcp honeypot --> " .. lng["CMD"]["HELP"][4])
-    else
-		print("[NMCP] " .. lng["CMD"]["ERROR"][1])
+	if config["Module"]["Anti-Net"]["Enabled"] then
+        if args[1] == "analyse" then
+            print("[NMCP ~ ANALYSE] " .. lng["CMD"]["ANALYSE"][1])
+            LoadAllNetworkID()
+        elseif args[1] == "honeypot" then
+            print("[NMCP ~ HONEY-POT] " .. lng["CMD"]["HONEYPOT"][1])
+            HoneyPot()
+        elseif args[1] == "debug" then
+            PrintTable(net.Receivers)
+        elseif args[1] == "help" then
+            print("[NMCP] " .. lng["CMD"]["HELP"][1])
+            print("[NMCP] nmcp analyse ---> " .. lng["CMD"]["HELP"][2])
+            print("[NMCP] nmcp debug -----> for test.")
+            print("[NMCP] nmcp help ------> " .. lng["CMD"]["HELP"][3])
+            print("[NMCP] nmcp honeypot --> " .. lng["CMD"]["HELP"][4])
+        else
+            print("[NMCP] " .. lng["CMD"]["ERROR"][1])
+        end
 	end
 end)
+
+function PlayerLoadAntiNet(plr, transition)
+    if config["Module"]["Anti-Net"]["Analyse"]["Auto-Start"] then
+        print("[NMCP ~ ANALYSE] " .. lng["CMD"]["ANALYSE"][1])
+        LoadAllNetworkID()
+	end
+    if config["Module"]["Anti-Net"]["HoneyPot"]["Auto-Start"] then
+        print("[NMCP ~ HONEY-POT] " .. lng["CMD"]["HONEYPOT"][1])
+        HoneyPot()
+	end
+end
+
+hook.Add("NMCP::Load", "NMCP::Load::ANTINET", PlayerLoadAntiNet)
