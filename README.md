@@ -1,18 +1,46 @@
-# ⚠️ ATTENTION ⚠️
-Cet addon est encore en développement et ces options ne seront peux être pas disponible au moment ou vous télécharger cette version.
+# NMCP
+_No More Cancerous Player_
 
-# No More Cancerous Player
 
-## NMCP késako ?
-NMCP est un addon pour les serveurs garrys'mod qui permet de facilité les bannissements des joueurs qui triches ou qui ne joues pas correctement.
 
-## NMCP feras quoi ?
-Cet addons s'occuperas des joueurs souhaitant utiliser les failles avec les Net (nostrip, ext) et vous informeras quel addons contiens un net malicieux ou non.
-Il s'occuperas aussi du physics-gun en le limitant pour éviter de voir vos véhicules voler en plein Roleplay.
+## English
 
-## Comment le télécharger ?
-Allez sur ce liens https://github.com/Matis-Projects/nmcp/releases puis allez dans Assets et enfin "Source Code (ZIP)" et il vous reste plus qu'à extraire.
+### ⚠️ WARNING ⚠️
+### This addon is under developpment and all features are not here or not working correctly.
 
-## Licence
+### What is NMCP ? 
+NMCP is an addon for give security to garry's mod server.
+
+### What do NMCP ?
+- [x] Ban player who use net for malicious reason. (nostrip and other)
+- [x] Limit the player's physics-gun. (props-kill)
+- [ ] Support multiple languages. (english-french)
+- [ ] Menu for admin. (administration menu)
+
+### How download it ?
+Go on this link https://github.com/Matis-Projects/nmcp/releases and click Assets and "Source Code (ZIP)".
+
+### Licence
+This work is under the licence GNU General Public License v3.0.
+You can read this license in the file LICENCE at the root of the addon.
+
+## Français
+
+### ⚠️ ATTENTION ⚠️
+### Cet addon est en cours de développement et toutes les fonctionnalités ne sont pas là ou ne fonctionnent pas correctement.
+
+### NMCP késako ?
+NMCP est un addon pour sécuriser les serveurs garrys'mod.
+
+### NMCP feras quoi ?
+- [x] Ban les joueurs qui utilisent les backdoors (nostrip et autres)
+- [x] Limite le physics-gun du joueurs (props-kill)
+- [ ] Support de plusieurs langages. (anglais-français)
+- [ ] Menu pour les admins. (menu d'administration)
+
+### Comment le télécharger ?
+Allez sur ce liens https://github.com/Matis-Projects/nmcp/releases puis allez dans Assets et enfin "Source Code (ZIP)".
+
+### Licence
 Ce travail est sous la licence GNU General Public License v3.0.
 Pour voir la licence, lisez le fichier LICENCE dans la racine de l'addon.
