@@ -7,7 +7,7 @@ local lng = {
         },
         ["VERSION-CHECK"] = {
             [1] = "Ceci est la dernière version disponible de NMCP. (%1)",
-            [2] = "Cette version n'est pas la dernière... Merci de mettre à jour de %1 à %2.",
+            [2] = "Cette version n'est plus supportée... Merci de mettre à jour de %1 à %2.",
             [3] = "Impossible de vérifier si NMCP est à jour."
         }
     },
