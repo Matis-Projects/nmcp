@@ -45,8 +45,8 @@ if SERVER then
 	end
     
 	hook.Add("PlayerSpawn", "NMCP::Load", PlayerSpawn)
-
-    AddCSLuaFile("nmcp/client/cl_notify.lua")
+	--
+	AddCSLuaFile("nmcp/client/cl_notify.lua")
 else
     include("nmcp/client/cl_notify.lua")
 end
