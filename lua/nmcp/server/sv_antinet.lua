@@ -1,5 +1,4 @@
-include("nmcp/languages/fr.lua")
-local lng = GetLanguages()
+local lng = GetLanguage()
 
 
 function LoadAllNetworkID()
@@ -142,12 +141,14 @@ concommand.Add( "nmcp", function( ply, cmd, args )
     elseif args[1] == "honeypot" then
         print("[NMCP ~ ANALYSE] " .. lng["CMD"]["HONEYPOT"][1])
 		HoneyPot()
-    elseif args[1] == "test" then
+    elseif args[1] == "debug" then
         PrintTable(net.Receivers)
     elseif args[1] == "help" then
 		print("[NMCP] " .. lng["CMD"]["HELP"][1])
-        print("[NMCP] nmcp analyse --> " .. lng["CMD"]["HELP"][2])
-        print("[NMCP] nmcp help -----> " .. lng["CMD"]["HELP"][3])
+        print("[NMCP] nmcp analyse ---> " .. lng["CMD"]["HELP"][2])
+        print("[NMCP] nmcp debug -----> for test.")
+        print("[NMCP] nmcp help ------> " .. lng["CMD"]["HELP"][3])
+        print("[NMCP] nmcp honeypot --> " .. lng["CMD"]["HELP"][4])
     else
 		print("[NMCP] " .. lng["CMD"]["ERROR"][1])
 	end
