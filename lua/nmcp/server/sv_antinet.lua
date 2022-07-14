@@ -150,7 +150,7 @@ function check_net(name, table)
 end
 
 concommand.Add( "nmcp", function( ply, cmd, args )
-	if config["Module"]["Anti-Net"]["Enabled"] then
+	if config["Modules"]["Anti-Net"]["Enabled"] then
         if args[1] == "analyse" then
             print("[NMCP ~ ANALYSE] " .. lng["CMD"]["ANALYSE"][1])
             LoadAllNetworkID()
@@ -172,11 +172,11 @@ concommand.Add( "nmcp", function( ply, cmd, args )
 end)
 
 function PlayerLoadAntiNet(plr, transition)
-    if config["Module"]["Anti-Net"]["Analyse"]["Auto-Start"] then
+    if config["Modules"]["Anti-Net"]["Analyse"]["Auto-Start"] then
         print("[NMCP ~ ANALYSE] " .. lng["CMD"]["ANALYSE"][1])
         LoadAllNetworkID()
 	end
-    if config["Module"]["Anti-Net"]["HoneyPot"]["Auto-Start"] then
+    if config["Modules"]["Anti-Net"]["HoneyPot"]["Auto-Start"] then
         print("[NMCP ~ HONEY-POT] " .. lng["CMD"]["HONEYPOT"][1])
         HoneyPot()
 	end
