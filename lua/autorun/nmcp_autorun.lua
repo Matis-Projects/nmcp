@@ -32,6 +32,7 @@ if SERVER then
 
         include("nmcp/server/sv_antinet.lua")
         include("nmcp/server/sv_physgun.lua")
+        include("nmcp/server/sv_menu.lua")
     end
     
     Start()
@@ -47,6 +48,8 @@ if SERVER then
 	hook.Add("PlayerSpawn", "NMCP::Load", PlayerSpawn)
 
     AddCSLuaFile("nmcp/client/cl_notify.lua")
+    AddCSLuaFile("nmcp/client/cl_menu.lua")
 else
     include("nmcp/client/cl_notify.lua")
+    include("nmcp/client/cl_menu.lua")
 end
