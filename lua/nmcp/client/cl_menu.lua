@@ -121,23 +121,49 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 			end
             TAB_HOME:SetVisible(true)
 
+
             local TAB_MODULE_ANTINET = vgui.Create( "DPanel", DermaPanel )
             TAB_MODULE_ANTINET:SetPos( 120, 50 ) -- Set the position of the panel
             TAB_MODULE_ANTINET:SetSize( 380, 550 ) -- Set the size of the panel
 			TAB_MODULE_ANTINET.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, faded_black)
-                draw.SimpleText("ANTI-NET", "NMCP::Font::TAB::Text", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText("ANTI-NET Configuration", "NMCP::Font::TAB::Title", 190, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
             TAB_MODULE_ANTINET:SetVisible(false)
+
+            local TAB_MODULE_ANTINET_ENABLE = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
+            TAB_MODULE_ANTINET_ENABLE:SetPos( 25, 50 )
+            TAB_MODULE_ANTINET_ENABLE:SetText("Enable the module")
+            TAB_MODULE_ANTINET_ENABLE:SetValue( true )
+            TAB_MODULE_ANTINET_ENABLE:SizeToContents()
+
+            local TAB_MODULE_ANTINET_ENABLE_ANALYSE = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
+            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetPos( 25, 70 )
+            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetText("When the server start, start a scan of the nets.")
+            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetValue( true )
+            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SizeToContents()
+
+            local TAB_MODULE_ANTINET_ENABLE_HP = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
+            TAB_MODULE_ANTINET_ENABLE_HP:SetPos( 25, 90 )
+            TAB_MODULE_ANTINET_ENABLE_HP:SetText("When the server start, create a honeypot.")
+            TAB_MODULE_ANTINET_ENABLE_HP:SetValue( true )
+            TAB_MODULE_ANTINET_ENABLE_HP:SizeToContents()
+
 
             local TAB_MODULE_PHYSIC = vgui.Create( "DPanel", DermaPanel )
             TAB_MODULE_PHYSIC:SetPos( 120, 50 ) -- Set the position of the panel
             TAB_MODULE_PHYSIC:SetSize( 380, 550 ) -- Set the size of the panel
 			TAB_MODULE_PHYSIC.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, faded_black)
-                draw.SimpleText("PHYSIC-GUN", "NMCP::Font::TAB::Text", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText("Physic-gun Configuration", "NMCP::Font::TAB::Title", 190, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
             TAB_MODULE_PHYSIC:SetVisible(false)
+
+            local TAB_MODULE_PHYSIC_ENABLE = TAB_MODULE_PHYSIC:Add( "DCheckBoxLabel" )
+            TAB_MODULE_PHYSIC_ENABLE:SetPos( 25, 90 )
+            TAB_MODULE_PHYSIC_ENABLE:SetText("Enable the module.")
+            TAB_MODULE_PHYSIC_ENABLE:SetValue( true )
+            TAB_MODULE_PHYSIC_ENABLE:SizeToContents()
                 
 			function DoUpdateScreen(int)
                 if int == 1 then
