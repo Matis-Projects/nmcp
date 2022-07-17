@@ -149,7 +149,7 @@ function check_net(name, table)
     return state
 end
 
-concommand.Add( "nmcp", function( ply, cmd, args )
+concommand.Add( "nmcp_antinet", function( ply, cmd, args )
 	if config["Modules"]["Anti-Net"]["Enabled"] then
         if args[1] == "analyse" then
             print("[NMCP ~ ANALYSE] " .. lng["CMD"]["ANALYSE"][1])

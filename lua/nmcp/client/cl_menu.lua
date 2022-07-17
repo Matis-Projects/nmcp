@@ -4,11 +4,15 @@ concommand.Add( "nmcp_admin_menu", function()
 end )
 
 local is_open = false
+local cfg = {}
+local tbl_fl = {}
 net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 	local is_auth = net.ReadBool()
 	if is_auth then
 		if is_open == false then
 			is_open = true
+            cfg = net.ReadTable()
+            tbl_fl = net.ReadTable()
             -- Then font named "Font" compacted on one line.
             surface.CreateFont("NMCP::Font::Title", {
                 font = "Arial",
@@ -102,10 +106,26 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 
             local BTN_MODULE_NONE = vgui.Create( "DPanel", DPanel )
             BTN_MODULE_NONE:SetPos( 0, 360 ) -- Set the position of the panel
-            BTN_MODULE_NONE:SetSize( 120, 240 ) -- Set the size of the panel
+            BTN_MODULE_NONE:SetSize( 120, 120 ) -- Set the size of the panel
             BTN_MODULE_NONE:SetText( "" )
 			BTN_MODULE_NONE.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, tbl_clr[4])
+			end
+
+            local BTN_MODULE_SAVE = vgui.Create( "DButton", DPanel )
+            BTN_MODULE_SAVE:SetPos( 0, 480 ) -- Set the position of the panel
+            BTN_MODULE_SAVE:SetSize( 120, 120 ) -- Set the size of the panel
+            BTN_MODULE_SAVE:SetText( "" )
+			BTN_MODULE_SAVE.Paint = function(self, w, h)
+				draw.RoundedBox(2, 0, 0, w, h, nselect_color)
+				draw.SimpleText("Sauvegarder", "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+            BTN_MODULE_SAVE.DoClick = function()
+				DermaPanel:Close()
+                net.Start("NMCP::ADMIN-MENU-ACT")
+                net.WriteString("Set-Config")
+                net.WriteTable(cfg)
+                net.SendToServer()
 			end
 
 
@@ -118,8 +138,22 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
                 draw.SimpleText("Bienvenue dans le menu d'administration de NMCP !", "NMCP::Font::TAB::Text", 190, 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
                 draw.SimpleText("Vous pouvez changez les paramètres des modules ici et", "NMCP::Font::TAB::Text", 190, 65, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
                 draw.SimpleText("Voir leurs options avancées.", "NMCP::Font::TAB::Text", 190, 80, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText("Langage: ", "NMCP::Font::TAB::Text", 25, 95, color_white)
 			end
             TAB_HOME:SetVisible(true)
+
+            local TAB_HOME_LANGUAGES = TAB_HOME:Add( "DComboBox" )
+            TAB_HOME_LANGUAGES:SetPos( 85, 95 )
+            TAB_HOME_LANGUAGES:SetSize( 100, 20 )
+            TAB_HOME_LANGUAGES:SetValue( cfg["Modules"]["Languages"] )
+
+            TAB_HOME_LANGUAGES.OnSelect = function( _, _, value )
+                cfg["Modules"]["Languages"] = string.Replace(value, ".lua", "")
+            end
+
+            for _, v in ipairs( tbl_fl ) do
+                TAB_HOME_LANGUAGES:AddChoice( v )
+            end
 
 
             local TAB_MODULE_ANTINET = vgui.Create( "DPanel", DermaPanel )
@@ -132,22 +166,31 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             TAB_MODULE_ANTINET:SetVisible(false)
 
             local TAB_MODULE_ANTINET_ENABLE = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
-            TAB_MODULE_ANTINET_ENABLE:SetPos( 25, 50 )
+            TAB_MODULE_ANTINET_ENABLE:SetPos( 25, 70 )
             TAB_MODULE_ANTINET_ENABLE:SetText("Enable the module")
-            TAB_MODULE_ANTINET_ENABLE:SetValue( true )
             TAB_MODULE_ANTINET_ENABLE:SizeToContents()
+            TAB_MODULE_ANTINET_ENABLE:SetValue(cfg["Modules"]["Anti-Net"]["Enabled"])
+            TAB_MODULE_ANTINET_ENABLE.OnChange = function()
+                cfg["Modules"]["Anti-Net"]["Enabled"] = TAB_MODULE_ANTINET_ENABLE:GetChecked()
+            end 
 
             local TAB_MODULE_ANTINET_ENABLE_ANALYSE = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
-            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetPos( 25, 70 )
+            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetPos( 25, 90 )
             TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetText("When the server start, start a scan of the nets.")
-            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetValue( true )
             TAB_MODULE_ANTINET_ENABLE_ANALYSE:SizeToContents()
+            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetValue(cfg["Modules"]["Anti-Net"]["Analyse"]["Auto-Start"])
+            TAB_MODULE_ANTINET_ENABLE_ANALYSE.OnChange = function()
+                cfg["Modules"]["Anti-Net"]["Analyse"]["Auto-Start"] = TAB_MODULE_ANTINET_ENABLE_ANALYSE:GetChecked()
+            end 
 
             local TAB_MODULE_ANTINET_ENABLE_HP = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
-            TAB_MODULE_ANTINET_ENABLE_HP:SetPos( 25, 90 )
+            TAB_MODULE_ANTINET_ENABLE_HP:SetPos( 25, 110 )
             TAB_MODULE_ANTINET_ENABLE_HP:SetText("When the server start, create a honeypot.")
-            TAB_MODULE_ANTINET_ENABLE_HP:SetValue( true )
             TAB_MODULE_ANTINET_ENABLE_HP:SizeToContents()
+            TAB_MODULE_ANTINET_ENABLE_HP:SetValue(cfg["Modules"]["Anti-Net"]["HoneyPot"]["Auto-Start"])
+            TAB_MODULE_ANTINET_ENABLE_HP.OnChange = function()
+                cfg["Modules"]["Anti-Net"]["HoneyPot"]["Auto-Start"] = TAB_MODULE_ANTINET_ENABLE_HP:GetChecked()
+            end 
 
 
             local TAB_MODULE_PHYSIC = vgui.Create( "DPanel", DermaPanel )
@@ -162,8 +205,29 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             local TAB_MODULE_PHYSIC_ENABLE = TAB_MODULE_PHYSIC:Add( "DCheckBoxLabel" )
             TAB_MODULE_PHYSIC_ENABLE:SetPos( 25, 90 )
             TAB_MODULE_PHYSIC_ENABLE:SetText("Enable the module.")
-            TAB_MODULE_PHYSIC_ENABLE:SetValue( true )
             TAB_MODULE_PHYSIC_ENABLE:SizeToContents()
+            TAB_MODULE_PHYSIC_ENABLE:SetValue(cfg["Modules"]["Physicgun-Limit"]["Enabled"])
+            TAB_MODULE_PHYSIC_ENABLE.OnChange = function()
+                cfg["Modules"]["Physicgun-Limit"]["Enabled"] = TAB_MODULE_ANTINET_ENABLE:GetChecked()
+            end 
+
+            local TAB_MODULE_PHYSIC_ENTITIES_ENABLE = TAB_MODULE_PHYSIC:Add( "DCheckBoxLabel" )
+            TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SetPos( 25, 110 )
+            TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SetText("Enable the physic-gun limitation to all entities (anti props-kill).")
+            TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SizeToContents()
+            TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SetValue(cfg["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"])
+            TAB_MODULE_PHYSIC_ENTITIES_ENABLE.OnChange = function()
+                cfg["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"] = TAB_MODULE_PHYSIC_ENTITIES_ENABLE:GetChecked()
+            end 
+
+            local TAB_MODULE_PHYSIC_VEHICLE_ENABLE = TAB_MODULE_PHYSIC:Add( "DCheckBoxLabel" )
+            TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SetPos( 25, 130 )
+            TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SetText("Enable the physic-gun limitation to all vehicles (can't touch with physic-gun).")
+            TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SizeToContents()
+            TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SetValue(cfg["Modules"]["Physicgun-Limit"]["Vehicle"]["Enabled"])
+            TAB_MODULE_PHYSIC_VEHICLE_ENABLE.OnChange = function()
+                cfg["Modules"]["Physicgun-Limit"]["Vehicle"]["Enabled"] = TAB_MODULE_PHYSIC_VEHICLE_ENABLE:GetChecked()
+            end 
                 
 			function DoUpdateScreen(int)
                 if int == 1 then
@@ -193,5 +257,22 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 		notification.AddLegacy( "You have to be superadmin to open this menu.", 0, 5 )
         surface.PlaySound( "buttons/button15.wav" )
         Msg( "You have to be superadmin to open this menu.\n" )
+	end
+end)
+
+net.Receive("NMCP::ADMIN-MENU-ACT", function(len,ply)
+    local action = net.ReadString()
+	if action == "Set-Config" then
+		local cfg = net.ReadTable()
+		local boleane = net.ReadBool()
+        if boleane then
+            notification.AddLegacy( "Les modifications ont été pris en compte!", 0, 5 )
+            surface.PlaySound( "buttons/button15.wav" )
+            Msg( "Les modifications ont été pris en compte!\n" )
+        else
+            notification.AddLegacy( "Un problème est survenue lors de la mise à jour du fichier CONFIG.", 0, 5 )
+            surface.PlaySound( "buttons/button15.wav" )
+            Msg( "Un problème est survenue lors de la mise à jour du fichier CONFIG.\n" )
+        end
 	end
 end)
