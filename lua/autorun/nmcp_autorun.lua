@@ -10,7 +10,7 @@ if SERVER then
         function Start()
             local lng = GetLanguage()
             
-            local version = "release-1.2" --> Please don't touch this!
+            local version = "release-1.2.1" --> Please don't touch this!
             local starttime = os.clock()
             print( "[NMCP] " .. lng["EVENT"]["HTTP-REQUEST"][1])
             http.Fetch( "https://raw.githubusercontent.com/Matis-Projects/nmcp/main/actual_version.txt",

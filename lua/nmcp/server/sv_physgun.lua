@@ -77,7 +77,9 @@ end
 hook.Add("OnPhysgunFreeze", "NMCP::SV_PHYSGUN::OnPhysgunFreeze", OnPhysgunFreeze)
 
 hook.Add( "PlayerShouldTakeDamage", "NMCP::SV_PHYSGUN::NO_KILL", function( ply, attacker )
-	if config["Modules"]["Physicgun-Limit"]["Enabled"] && config["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"] then
-        return false
-    end
+   	if attacker:GetClass() == "prop_physics" then
+        if config["Modules"]["Physicgun-Limit"]["Enabled"] && config["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"] then
+            return false
+        end
+	end
 end )
