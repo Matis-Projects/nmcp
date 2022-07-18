@@ -1,5 +1,6 @@
 if SERVER then
     include("nmcp/server/sv_config.lua")
+    include("nmcp/server/sv_reload.lua")
     local config = GetConfigFile()
     if config == false then
         print("[NMCP] Critical error! The config file don't work, please recheck it !")
@@ -9,7 +10,7 @@ if SERVER then
         function Start()
             local lng = GetLanguage()
             
-            local version = "beta_1.1.9" --> Please don't touch this!
+            local version = "release-1.2" --> Please don't touch this!
             local starttime = os.clock()
             print( "[NMCP] " .. lng["EVENT"]["HTTP-REQUEST"][1])
             http.Fetch( "https://raw.githubusercontent.com/Matis-Projects/nmcp/main/actual_version.txt",
@@ -34,9 +35,7 @@ if SERVER then
             )
 
             include("nmcp/server/sv_antinet.lua")
-            include("nmcp/server/sv_physgun.lua")
-            include("nmcp/server/sv_menu.lua")
-            include("nmcp/server/sv_reload.lua")
+            LoadOtherScripts()
         end
         
         Start()
@@ -53,6 +52,10 @@ if SERVER then
 
         AddCSLuaFile("nmcp/client/cl_notify.lua")
         AddCSLuaFile("nmcp/client/cl_menu.lua")
+
+        for k, v in pairs(file.Find( "nmcp/languages/*.lua", "LUA" )) do
+            AddCSLuaFile("nmcp/languages/" .. v)
+        end
     end
 else
     include("nmcp/client/cl_notify.lua")

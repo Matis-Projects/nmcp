@@ -6,12 +6,16 @@ end )
 local is_open = false
 local cfg = {}
 local tbl_fl = {}
+local lng = {}
+
 net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 	local is_auth = net.ReadBool()
 	if is_auth then
 		if is_open == false then
 			is_open = true
             cfg = net.ReadTable()
+            include("nmcp/languages/" .. cfg["Modules"]["Languages"])
+            lng = GetLanguage()
             tbl_fl = net.ReadTable()
             -- Then font named "Font" compacted on one line.
             surface.CreateFont("NMCP::Font::Title", {
@@ -74,7 +78,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             BTN_HOME:SetText( "" )
 			BTN_HOME.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, tbl_clr[1])
-				draw.SimpleText("Home", "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(lng["ADMIN-MENU"]["LEFT_BTN"][1], "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
             BTN_HOME.DoClick = function()
 				DoUpdateScreen(1)
@@ -86,7 +90,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             BTN_MODULE_ANTINET:SetText( "" )
 			BTN_MODULE_ANTINET.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, tbl_clr[2])
-				draw.SimpleText("Anti-Net", "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(lng["ADMIN-MENU"]["LEFT_BTN"][2], "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
             BTN_MODULE_ANTINET.DoClick = function()
 				DoUpdateScreen(2)
@@ -98,7 +102,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             BTN_MODULE_PHYSIC:SetText( "" )
 			BTN_MODULE_PHYSIC.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, tbl_clr[3])
-				draw.SimpleText("Physicgun limitation", "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(lng["ADMIN-MENU"]["LEFT_BTN"][3], "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
             BTN_MODULE_PHYSIC.DoClick = function()
 				DoUpdateScreen(3)
@@ -118,7 +122,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             BTN_MODULE_SAVE:SetText( "" )
 			BTN_MODULE_SAVE.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, nselect_color)
-				draw.SimpleText("Sauvegarder", "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(lng["ADMIN-MENU"]["LEFT_BTN"][4], "NMCP::Font::BTN-TAB", 60, 100, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
             BTN_MODULE_SAVE.DoClick = function()
 				DermaPanel:Close()
@@ -134,11 +138,11 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             TAB_HOME:SetSize( 380, 550 ) -- Set the size of the panel
 			TAB_HOME.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, faded_black)
-                draw.SimpleText("Accueil", "NMCP::Font::TAB::Title", 190, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                draw.SimpleText("Bienvenue dans le menu d'administration de NMCP !", "NMCP::Font::TAB::Text", 190, 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                draw.SimpleText("Vous pouvez changez les paramètres des modules ici et", "NMCP::Font::TAB::Text", 190, 65, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                draw.SimpleText("Voir leurs options avancées.", "NMCP::Font::TAB::Text", 190, 80, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                draw.SimpleText("Langage: ", "NMCP::Font::TAB::Text", 25, 95, color_white)
+                draw.SimpleText(lng["ADMIN-MENU"]["LEFT_BTN"][1], "NMCP::Font::TAB::Title", 190, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(lng["ADMIN-MENU"]["TABS"]["HOME"]["TEXTS"][1], "NMCP::Font::TAB::Text", 190, 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(lng["ADMIN-MENU"]["TABS"]["HOME"]["TEXTS"][2], "NMCP::Font::TAB::Text", 190, 65, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(lng["ADMIN-MENU"]["TABS"]["HOME"]["TEXTS"][3], "NMCP::Font::TAB::Text", 190, 80, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(lng["ADMIN-MENU"]["TABS"]["HOME"]["INPUTS"][1], "NMCP::Font::TAB::Text", 25, 95, color_white)
 			end
             TAB_HOME:SetVisible(true)
 
@@ -148,7 +152,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             TAB_HOME_LANGUAGES:SetValue( cfg["Modules"]["Languages"] )
 
             TAB_HOME_LANGUAGES.OnSelect = function( _, _, value )
-                cfg["Modules"]["Languages"] = string.Replace(value, ".lua", "")
+                cfg["Modules"]["Languages"] = value
             end
 
             for _, v in ipairs( tbl_fl ) do
@@ -161,13 +165,13 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             TAB_MODULE_ANTINET:SetSize( 380, 550 ) -- Set the size of the panel
 			TAB_MODULE_ANTINET.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, faded_black)
-                draw.SimpleText("ANTI-NET Configuration", "NMCP::Font::TAB::Title", 190, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(lng["ADMIN-MENU"]["LEFT_BTN"][2], "NMCP::Font::TAB::Title", 190, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
             TAB_MODULE_ANTINET:SetVisible(false)
 
             local TAB_MODULE_ANTINET_ENABLE = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
             TAB_MODULE_ANTINET_ENABLE:SetPos( 25, 70 )
-            TAB_MODULE_ANTINET_ENABLE:SetText("Enable the module")
+            TAB_MODULE_ANTINET_ENABLE:SetText(lng["ADMIN-MENU"]["TABS"]["ANTI-NET"]["INPUTS"][1])
             TAB_MODULE_ANTINET_ENABLE:SizeToContents()
             TAB_MODULE_ANTINET_ENABLE:SetValue(cfg["Modules"]["Anti-Net"]["Enabled"])
             TAB_MODULE_ANTINET_ENABLE.OnChange = function()
@@ -176,7 +180,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 
             local TAB_MODULE_ANTINET_ENABLE_ANALYSE = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
             TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetPos( 25, 90 )
-            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetText("When the server start, start a scan of the nets.")
+            TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetText(lng["ADMIN-MENU"]["TABS"]["ANTI-NET"]["INPUTS"][2])
             TAB_MODULE_ANTINET_ENABLE_ANALYSE:SizeToContents()
             TAB_MODULE_ANTINET_ENABLE_ANALYSE:SetValue(cfg["Modules"]["Anti-Net"]["Analyse"]["Auto-Start"])
             TAB_MODULE_ANTINET_ENABLE_ANALYSE.OnChange = function()
@@ -185,7 +189,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 
             local TAB_MODULE_ANTINET_ENABLE_HP = TAB_MODULE_ANTINET:Add( "DCheckBoxLabel" )
             TAB_MODULE_ANTINET_ENABLE_HP:SetPos( 25, 110 )
-            TAB_MODULE_ANTINET_ENABLE_HP:SetText("When the server start, create a honeypot.")
+            TAB_MODULE_ANTINET_ENABLE_HP:SetText(lng["ADMIN-MENU"]["TABS"]["ANTI-NET"]["INPUTS"][3])
             TAB_MODULE_ANTINET_ENABLE_HP:SizeToContents()
             TAB_MODULE_ANTINET_ENABLE_HP:SetValue(cfg["Modules"]["Anti-Net"]["HoneyPot"]["Auto-Start"])
             TAB_MODULE_ANTINET_ENABLE_HP.OnChange = function()
@@ -198,13 +202,13 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
             TAB_MODULE_PHYSIC:SetSize( 380, 550 ) -- Set the size of the panel
 			TAB_MODULE_PHYSIC.Paint = function(self, w, h)
 				draw.RoundedBox(2, 0, 0, w, h, faded_black)
-                draw.SimpleText("Physic-gun Configuration", "NMCP::Font::TAB::Title", 190, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(lng["ADMIN-MENU"]["LEFT_BTN"][3], "NMCP::Font::TAB::Title", 190, 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
             TAB_MODULE_PHYSIC:SetVisible(false)
 
             local TAB_MODULE_PHYSIC_ENABLE = TAB_MODULE_PHYSIC:Add( "DCheckBoxLabel" )
             TAB_MODULE_PHYSIC_ENABLE:SetPos( 25, 90 )
-            TAB_MODULE_PHYSIC_ENABLE:SetText("Enable the module.")
+            TAB_MODULE_PHYSIC_ENABLE:SetText(lng["ADMIN-MENU"]["TABS"]["PHYSIC-GUN"]["INPUTS"][1])
             TAB_MODULE_PHYSIC_ENABLE:SizeToContents()
             TAB_MODULE_PHYSIC_ENABLE:SetValue(cfg["Modules"]["Physicgun-Limit"]["Enabled"])
             TAB_MODULE_PHYSIC_ENABLE.OnChange = function()
@@ -213,7 +217,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 
             local TAB_MODULE_PHYSIC_ENTITIES_ENABLE = TAB_MODULE_PHYSIC:Add( "DCheckBoxLabel" )
             TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SetPos( 25, 110 )
-            TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SetText("Enable the physic-gun limitation to all entities (anti props-kill).")
+            TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SetText(lng["ADMIN-MENU"]["TABS"]["PHYSIC-GUN"]["INPUTS"][2])
             TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SizeToContents()
             TAB_MODULE_PHYSIC_ENTITIES_ENABLE:SetValue(cfg["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"])
             TAB_MODULE_PHYSIC_ENTITIES_ENABLE.OnChange = function()
@@ -222,7 +226,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 
             local TAB_MODULE_PHYSIC_VEHICLE_ENABLE = TAB_MODULE_PHYSIC:Add( "DCheckBoxLabel" )
             TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SetPos( 25, 130 )
-            TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SetText("Enable the physic-gun limitation to all vehicles (can't touch with physic-gun).")
+            TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SetText(lng["ADMIN-MENU"]["TABS"]["PHYSIC-GUN"]["INPUTS"][3])
             TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SizeToContents()
             TAB_MODULE_PHYSIC_VEHICLE_ENABLE:SetValue(cfg["Modules"]["Physicgun-Limit"]["Vehicle"]["Enabled"])
             TAB_MODULE_PHYSIC_VEHICLE_ENABLE.OnChange = function()
@@ -254,7 +258,7 @@ net.Receive("NMCP::ADMIN-MENU", function(len,ply)
 			end
 		end
 	else
-		notification.AddLegacy( "You have to be superadmin to open this menu.", 0, 5 )
+		notification.AddLegacy( lng["EVENT"]["ADMIN-MENU"][1], 0, 5 )
         surface.PlaySound( "buttons/button15.wav" )
         Msg( "You have to be superadmin to open this menu.\n" )
 	end
@@ -266,13 +270,13 @@ net.Receive("NMCP::ADMIN-MENU-ACT", function(len,ply)
 		local cfg = net.ReadTable()
 		local boleane = net.ReadBool()
         if boleane then
-            notification.AddLegacy( "Les modifications ont été pris en compte!", 0, 5 )
+            notification.AddLegacy( lng["EVENT"]["ADMIN-MENU"][2], 0, 5 )
             surface.PlaySound( "buttons/button15.wav" )
-            Msg( "Les modifications ont été pris en compte!\n" )
+            Msg( lng["EVENT"]["ADMIN-MENU"][2] .. "\n" )
         else
-            notification.AddLegacy( "Un problème est survenue lors de la mise à jour du fichier CONFIG.", 0, 5 )
+            notification.AddLegacy( lng["EVENT"]["ADMIN-MENU"][3], 0, 5 )
             surface.PlaySound( "buttons/button15.wav" )
-            Msg( "Un problème est survenue lors de la mise à jour du fichier CONFIG.\n" )
+            Msg( lng["EVENT"]["ADMIN-MENU"][3] .. "\n" )
         end
 	end
 end)

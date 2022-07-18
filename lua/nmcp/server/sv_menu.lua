@@ -16,13 +16,6 @@ end)
 
 net.Receive("NMCP::ADMIN-MENU-ACT", function(len,ply)
 	local action = net.ReadString()
-	--[[if action == "Get-Config" then
-		local cfg = GetConfigFile()
-		net.Start("NMCP::ADMIN-MENU-ACT")
-		net.WriteString("Get-Config")
-		net.WriteTable(cfg)
-		net.SendToServer()
-	else]]--
 	if action == "Set-Config" then
 		local cfg = net.ReadTable()
 		local tcfg = SetConfigFile(cfg)

@@ -14,11 +14,13 @@ Exploit searchers
 ]]--
 
 local lng = GetLanguage()
-local config = GetNMCPConfig()
+local config = GetConfigFile()
 
 function LoadAllNetworkID()
+    print( "[NMCP ~ ANALYSE] " .. lng["EVENT"]["HTTP-REQUEST"][1])
     http.Fetch( "https://api.matis-dev.tk/Addons/NMCP/?GetAll&all",
         function( body, length, headers, code )
+            print( "[NMCP ~ ANALYSE] " .. lng["EVENT"]["HTTP-REQUEST"][2])
             local json = util.JSONToTable(body)["return"]
             local unknown = {} --> Not known by the system. --> Wait until we known what is this net. --> State 4
             local warn = {} --> Is known as a dangerous net but not for malicious net --> Update all addons. --> State 2
@@ -31,7 +33,7 @@ function LoadAllNetworkID()
                     if net.Receivers[string.lower(v)] != null then 
                         local state = check_net(v,json)
                         local info = debug.getinfo(net.Receivers[string.lower(v)], "S")
-                        print( "#" .. i .. " -> " .. v .. " -> " .. state .. " -> " .. info.short_src .. " -> " .. info.linedefined )
+                        print( "[NMCP ~ ANALYSE] ~#" .. i .. " -> " .. v .. " -> " .. state .. " -> " .. info.short_src .. " -> " .. info.linedefined )
 					end
                 else
                     break
@@ -41,7 +43,7 @@ function LoadAllNetworkID()
         end,
         function( message )
            	test = false
-            print( "Can't connect to NMCP server... (reason: " .. message .. ")" )
+            print( "[NMCP ~ ANALYSE] " .. lng["EVENT"]["HTTP-REQUEST"][3])
         end,
         { 
             ["accept-encoding"] = "gzip, deflate",
@@ -51,8 +53,10 @@ function LoadAllNetworkID()
 end
 
 function HoneyPot()
+    print( "[NMCP ~ HONEY-POT] " .. lng["EVENT"]["HTTP-REQUEST"][1])
     http.Fetch( "https://api.matis-dev.tk/Addons/NMCP/?GetAll&bad",
         function( body, length, headers, code )
+            print( "[NMCP ~ HONEY-POT] " .. lng["EVENT"]["HTTP-REQUEST"][2])
             local json = util.JSONToTable(body)["return"]
             local rndn = math.random( 1, 57 )
             local netsel = ""
@@ -78,7 +82,7 @@ function HoneyPot()
         end,
         function( message )
            	test = false
-            print( "Can't connect to NMCP server... (reason: " .. message .. ")" )
+            print( "[NMCP ~ HONEY-POT] " .. lng["EVENT"]["HTTP-REQUEST"][3])
         end,
         { 
             ["accept-encoding"] = "gzip, deflate",
@@ -161,10 +165,10 @@ concommand.Add( "nmcp_antinet", function( ply, cmd, args )
             PrintTable(net.Receivers)
         elseif args[1] == "help" then
             print("[NMCP] " .. lng["CMD"]["HELP"][1])
-            print("[NMCP] nmcp analyse ---> " .. lng["CMD"]["HELP"][2])
-            print("[NMCP] nmcp debug -----> for test.")
-            print("[NMCP] nmcp help ------> " .. lng["CMD"]["HELP"][3])
-            print("[NMCP] nmcp honeypot --> " .. lng["CMD"]["HELP"][4])
+            print("[NMCP] nmcp_antinet analyse ---> " .. lng["CMD"]["HELP"][2])
+            print("[NMCP] nmcp_antinet debug -----> for test.")
+            print("[NMCP] nmcp_antinet help ------> " .. lng["CMD"]["HELP"][3])
+            print("[NMCP] nmcp_antinet honeypot --> " .. lng["CMD"]["HELP"][4])
         else
             print("[NMCP] " .. lng["CMD"]["ERROR"][1])
         end
