@@ -15,7 +15,7 @@ NMCP is an addon for give security to garry's mod server.
 - [x] Ban player who use net for malicious reason. (nostrip and other)
 - [x] Limit the player's physics-gun. (props-kill)
 - [x] Support multiple languages. (english-french)
-- [ ] Menu for admin. (administration menu)
+- [x] Menu for admin. (administration menu)
 
 ### How download it ?
 Go on this link https://github.com/Matis-Projects/nmcp/releases and click Assets and "Source Code (ZIP)".
@@ -36,7 +36,7 @@ NMCP est un addon pour sécuriser les serveurs garrys'mod.
 - [x] Ban les joueurs qui utilisent les backdoors (nostrip et autres)
 - [x] Limite le physics-gun du joueurs (props-kill)
 - [x] Support de plusieurs langages. (anglais-français)
-- [ ] Menu pour les admins. (menu d'administration)
+- [x] Menu pour les admins. (menu d'administration)
 
 ### Comment le télécharger ?
 Allez sur ce liens https://github.com/Matis-Projects/nmcp/releases puis allez dans Assets et enfin "Source Code (ZIP)".
