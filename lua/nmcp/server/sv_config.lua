@@ -11,7 +11,7 @@
 ]]--
 
 function CreateConfigFile()
-    include("nmcp/sv_config.lua")
+    include("nmcp/default_config.lua")
     if not(file.IsDir( "nmcp/", "DATA" )) then
         file.CreateDir( "nmcp/" )
     end
@@ -56,14 +56,22 @@ function VerifyConfigFile(cfg)
                     if vcf_ifexist(cfg["Modules"]["Physicgun-Limit"]["Enabled"]) then 
                         if vcf_ifexist(cfg["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"]) then 
                             if vcf_ifexist(cfg["Modules"]["Physicgun-Limit"]["Vehicle"]["Enabled"]) then 
-                                ok = true
-                                -- Module Sync Ban Limitation
-                                /*if vcf_ifexist(cfg["Modules"]["SyncBan"]["Enabled"]) then 
-                                    if vcf_ifexist(cfg["Modules"]["SyncBan"]["Send-Ban"]) then 
-                                        if vcf_ifexist(cfg["Modules"]["SyncBan"]["Check-Player-When-He-Coming"]) then 
-                                            if vcf_ifexist(cfg["Modules"]["SyncBan"]["Warn-When-Coming"]) then 
-                                                if vcf_ifexist(cfg["Modules"]["SyncBan"]["Ban-When-Coming"]) then 
-                                                    ok = true
+                                if vcf_ifexist(cfg["Modules"]["Physicgun-Limit"]["WhiteList"]["Vehicles"]) then 
+                                    if vcf_ifexist(cfg["Modules"]["Physicgun-Limit"]["WhiteList"]["Other"]) then 
+                                        ok = true
+                                        -- Module Sync Ban Limitation
+                                        /*if vcf_ifexist(cfg["Modules"]["SyncBan"]["Enabled"]) then 
+                                            if vcf_ifexist(cfg["Modules"]["SyncBan"]["Send-Ban"]) then 
+                                                if vcf_ifexist(cfg["Modules"]["SyncBan"]["Check-Player-When-He-Coming"]) then 
+                                                    if vcf_ifexist(cfg["Modules"]["SyncBan"]["Warn-When-Coming"]) then 
+                                                        if vcf_ifexist(cfg["Modules"]["SyncBan"]["Ban-When-Coming"]) then 
+                                                            ok = true
+                                                        else
+                                                            ok = false
+                                                        end
+                                                    else
+                                                        ok = false
+                                                    end
                                                 else
                                                     ok = false
                                                 end
@@ -72,13 +80,13 @@ function VerifyConfigFile(cfg)
                                             end
                                         else
                                             ok = false
-                                        end
+                                        end*/
                                     else
                                         ok = false
                                     end
                                 else
                                     ok = false
-                                end*/
+                                end
                             else
                                 ok = false
                             end

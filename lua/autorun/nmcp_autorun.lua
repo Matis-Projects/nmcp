@@ -2,7 +2,7 @@ if SERVER then
     include("nmcp/server/sv_config.lua")
     include("nmcp/server/sv_reload.lua")
     local config = GetConfigFile()
-    if config == false then
+    if not(config) then
         print("[NMCP] Critical error! The config file don't work, please recheck it !")
     else
         include("nmcp/languages/" .. config["Modules"]["Languages"])
@@ -10,7 +10,7 @@ if SERVER then
         function Start()
             local lng = GetLanguage()
             
-            local version = "release-1.2.1" --> Please don't touch this!
+            local version = "release-1.3" --> Please don't touch this!
             local starttime = os.clock()
             print( "[NMCP] " .. lng["EVENT"]["HTTP-REQUEST"][1])
             http.Fetch( "https://raw.githubusercontent.com/Matis-Projects/nmcp/main/actual_version.txt",

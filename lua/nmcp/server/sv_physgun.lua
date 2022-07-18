@@ -16,6 +16,7 @@ local lng = GetLanguage()
 
 function PhysgunDrop( ply, ent )
     if config["Modules"]["Physicgun-Limit"]["Enabled"] && config["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"] then
+        if not(config["Modules"]["Physicgun-Limit"]["WhiteList"]["Other"][ent:GetClass()]) then return end
         local found = false
         for k, v in pairs(ents.FindInSphere(ent:GetPos(), ent:GetModelRadius() /4)) do
             if not(isintable(classbl,v:GetClass())) && v:EntIndex() != ent:EntIndex() then
@@ -42,16 +43,20 @@ hook.Add("PhysgunDrop", "NMCP::SV_PHYSGUN::PhysgunDrop", PhysgunDrop)
 function PhysgunPickup( ply, ent )
     if config["Modules"]["Physicgun-Limit"]["Enabled"] then
         if config["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"] then
-            ent:SetPos(ent:GetPos())
-            ent:SetCollisionGroup(1)
-            ent:SetColor(Color(55,55,55,100))
-            ent.freeze = true
+            if config["Modules"]["Physicgun-Limit"]["WhiteList"]["Other"][ent:GetClass()] then
+                ent:SetPos(ent:GetPos())
+                ent:SetCollisionGroup(1)
+                ent:SetColor(Color(55,55,55,100))
+                ent.freeze = true
+            end
         end
         if ent:IsVehicle() && config["Modules"]["Physicgun-Limit"]["Vehicle"]["Enabled"] then
-            if ply:IsAdmin() || ply:IsSuperAdmin() then
-                return true
-            else
-                return false
+            if config["Modules"]["Physicgun-Limit"]["WhiteList"]["Vehicles"][ent:GetClass()] then
+                if ply:IsAdmin() || ply:IsSuperAdmin() then
+                    return true
+                else
+                    return false
+                end
             end
         end
     end
@@ -60,26 +65,28 @@ hook.Add("PhysgunPickup", "NMCP::SV_PHYSGUN::PhysgunPickup", PhysgunPickup)
 
 function OnPhysgunFreeze( weapon, phys, ent, ply )
     if config["Modules"]["Physicgun-Limit"]["Enabled"] && config["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"] then
-        local found = false
-        for k, v in pairs(ents.FindInSphere(ent:GetPos(), ent:GetModelRadius() /4)) do
-            if not(isintable(classbl,v:GetClass())) && v:EntIndex() != ent:EntIndex() then
-                found = true
-                break
+        if config["Modules"]["Physicgun-Limit"]["WhiteList"]["Other"][ent:GetClass()] then
+            local found = false
+            for k, v in pairs(ents.FindInSphere(ent:GetPos(), ent:GetModelRadius() /4)) do
+                if not(isintable(classbl,v:GetClass())) && v:EntIndex() != ent:EntIndex() then
+                    found = true
+                    break
+                end
             end
-        end
-        if not(found) then
-            ent.freeze = false
-        else
-            return false
+            if not(found) then
+                ent.freeze = false
+            else
+                return false
+            end
         end
 	end
 end
 hook.Add("OnPhysgunFreeze", "NMCP::SV_PHYSGUN::OnPhysgunFreeze", OnPhysgunFreeze)
 
 hook.Add( "PlayerShouldTakeDamage", "NMCP::SV_PHYSGUN::NO_KILL", function( ply, attacker )
-   	if attacker:GetClass() == "prop_physics" then
+    if attacker:IsPlayer() and attacker:GetWeapon() == "weapon_physgun" or config["Modules"]["Physicgun-Limit"]["WhiteList"]["Other"][attacker:GetClass()] then
         if config["Modules"]["Physicgun-Limit"]["Enabled"] && config["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"] then
             return false
         end
-	end
+    end
 end )
