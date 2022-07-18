@@ -82,11 +82,3 @@ function OnPhysgunFreeze( weapon, phys, ent, ply )
 	end
 end
 hook.Add("OnPhysgunFreeze", "NMCP::SV_PHYSGUN::OnPhysgunFreeze", OnPhysgunFreeze)
-
-hook.Add( "PlayerShouldTakeDamage", "NMCP::SV_PHYSGUN::NO_KILL", function( ply, attacker )
-    if attacker:IsPlayer() and attacker:GetWeapon() == "weapon_physgun" or config["Modules"]["Physicgun-Limit"]["WhiteList"]["Other"][attacker:GetClass()] then
-        if config["Modules"]["Physicgun-Limit"]["Enabled"] && config["Modules"]["Physicgun-Limit"]["Entities"]["Enabled"] then
-            return false
-        end
-    end
-end )
