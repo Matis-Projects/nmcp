@@ -7,6 +7,7 @@ _No More Cancerous Player_
 
 ### ⚠️ WARNING ⚠️
 ### This addon is under developpment and all features are not here or not working correctly.
+### This addon is a shitty addon and just the module for ban player who use malicious net is working correctly...
 
 ### What is NMCP ? 
 NMCP is an addon for give security to garry's mod server.
@@ -28,6 +29,7 @@ You can read this license in the file LICENCE at the root of the addon.
 
 ### ⚠️ ATTENTION ⚠️
 ### Cet addon est en cours de développement et toutes les fonctionnalités ne sont pas là ou ne fonctionnent pas correctement.
+### Cet addon mal codé et seul le module qui ban automatiquement les gens qui utilises des nets fonctionne un peu près.
 
 ### NMCP késako ?
 NMCP est un addon pour sécuriser les serveurs garrys'mod.
