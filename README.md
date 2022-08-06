@@ -29,7 +29,7 @@ You can read this license in the file LICENCE at the root of the addon.
 
 ### ⚠️ ATTENTION ⚠️
 ### Cet addon est en cours de développement et toutes les fonctionnalités ne sont pas là ou ne fonctionnent pas correctement.
-### Cet addon mal codé et seul le module qui ban automatiquement les gens qui utilises des nets fonctionne un peu près.
+### Cet addon est mal fait et seul le module qui ban automatiquement les gens qui utilises des nets fonctionne un peu près.
 
 ### NMCP késako ?
 NMCP est un addon pour sécuriser les serveurs garrys'mod.
